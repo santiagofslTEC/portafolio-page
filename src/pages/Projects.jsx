@@ -6,6 +6,7 @@ import "./Projects.css";
 const Projects = () => {
   const canvasRef = useRef(null);
   const contentRef = useRef(null);
+  const overlayRef = useRef(null);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -88,10 +89,17 @@ const Projects = () => {
     };
     animate();
 
+    // fade out the dark overlay left by the wave
+    gsap.to(overlayRef.current, {
+      opacity: 0,
+      duration: 0.8,
+      ease: "power2.out",
+    });
+
     // fade in content
     gsap.fromTo(contentRef.current,
       { opacity: 0, y: 40 },
-      { opacity: 1, y: 0, duration: 1.2, ease: "power3.out", delay: 0.3 }
+      { opacity: 1, y: 0, duration: 1.2, ease: "power3.out", delay: 0.5 }
     );
 
     const handleResize = () => {
@@ -110,6 +118,7 @@ const Projects = () => {
 
   return (
     <div className="projects-container">
+      <div ref={overlayRef} style={{ position: "fixed", inset: 0, background: "#041e33", zIndex: 100, pointerEvents: "none" }} />
       <canvas ref={canvasRef} className="projects-canvas" />
 
       <div ref={contentRef} className="projects-content">
