@@ -1,0 +1,37 @@
+*, *::before, *::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  html {
+    scroll-behavior: smooth;
+  }
+  
+  :root {
+    --color-base: #0d1b2e;
+    --color-deep: #1a3a5c;
+    --color-mid: #3d6b8f;
+    --color-foam: #7a9ab5;
+    --color-cream: #f0ead6;
+  }
+  
+  body {
+    background-color: var(--color-base);
+    color: var(--color-cream);
+    font-family: 'Inter', 'Arial', sans-serif;
+    overflow-x: hidden;
+  }
+  
+  ::-webkit-scrollbar {
+    width: 6px;
+  }
+  
+  ::-webkit-scrollbar-track {
+    background: var(--color-base);
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    background: var(--color-mid);
+    border-radius: 3px;
+  }

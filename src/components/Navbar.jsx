@@ -1,27 +1,17 @@
 import "./Navbar.css";
 import { Link } from "react-router";
 
-const Navbar = ({ children }) => {
+const Navbar = () => {
   return (
-    <>
-      <div className="container-navbar">
-        <div className="links">
-          <p>
-            <Link to="/Home">Home</Link>
-          </p>
-          <p>
-            <Link to="/AboutMe">About Me</Link>
-          </p>
-          <p>
-            <Link to="/Projects">Projects</Link>
-          </p>
-          <p>
-            <Link to="/ContactMe">Contact Me</Link>
-          </p>
-        </div>
+    <nav className="navbar">
+      <div className="navbar-logo">SF</div>
+      <div className="navbar-links">
+        <Link to="/">Home</Link>
+        <Link to="/AboutMe">About Me</Link>
+        <Link to="/Projects">Projects</Link>
+        <Link to="/ContactMe">Contact Me</Link>
       </div>
-      {children}
-    </>
+    </nav>
   );
 };
 
