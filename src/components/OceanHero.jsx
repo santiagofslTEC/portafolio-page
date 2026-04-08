@@ -5,7 +5,7 @@ import "./OceanHero.css";
 
 gsap.registerPlugin(ScrollTrigger);
 
-const OceanHero = ({ onDive }) => {
+const OceanHero = ({ onDive, projectsRef }) => {
   const containerRef = useRef(null);
   const videoRef = useRef(null);
   const titleRef = useRef(null);
@@ -14,6 +14,9 @@ const OceanHero = ({ onDive }) => {
   const waveRef = useRef(null);
 
   useEffect(() => {
+    // reset scroll so ScrollTrigger doesn't fire onLeave immediately
+    window.scrollTo(0, 0);
+
     // text reveal on load
     gsap.fromTo(titleRef.current,
       { y: 60, opacity: 0 },
@@ -29,24 +32,37 @@ const OceanHero = ({ onDive }) => {
     );
 
     // wave wipe from right to left
+    const scrollConfig = {
+      trigger: containerRef.current,
+      start: "top top",
+      end: "+=800",
+      scrub: 1,
+      pin: true,
+      anticipatePin: 1,
+      onLeave: () => onDive(),
+    };
+
     gsap.fromTo(waveRef.current,
       { x: "100vw" },
-      {
-        x: "-10vw",
-        ease: "power2.inOut",
-        scrollTrigger: {
-          trigger: containerRef.current,
-          start: "top top",
-          end: "+=800",
-          scrub: 1,
-          pin: true,
-          anticipatePin: 1,
-          onLeave: () => {
-            onDive();
-          }
-        }
-      }
+      { x: "-10vw", ease: "power2.inOut", scrollTrigger: scrollConfig }
     );
+
+    // slide projects page in alongside the wave
+    if (projectsRef?.current) {
+      gsap.fromTo(projectsRef.current,
+        { x: "100vw" },
+        {
+          x: "0vw",
+          ease: "power2.inOut",
+          scrollTrigger: {
+            trigger: containerRef.current,
+            start: "top top",
+            end: "+=800",
+            scrub: 1,
+          },
+        }
+      );
+    }
 
     // fade out text as wave approaches
     gsap.to([titleRef.current, subtitleRef.current, scrollRef.current], {
@@ -64,7 +80,7 @@ const OceanHero = ({ onDive }) => {
     return () => {
       ScrollTrigger.getAll().forEach(t => t.kill());
     };
-  }, []);
+  }, [onDive, projectsRef]);
 
   return (
     <div ref={containerRef} className="ocean-container">

@@ -1,0 +1,161 @@
+.contactme-container {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  background: radial-gradient(
+    ellipse at center,
+    #0a3d6b 0%,
+    #041e33 40%,
+    #020c1a 100%
+  );
+  overflow: hidden;
+}
+
+.contactme-canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.contactme-content {
+  position: relative;
+  z-index: 1;
+  padding: 120px 80px 80px;
+  opacity: 0;
+}
+
+.depth-label {
+  font-size: 11px;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: #00d4ff;
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.contactme-title {
+  font-size: 72px;
+  font-weight: 700;
+  color: #e0f7ff;
+  letter-spacing: 6px;
+  text-transform: uppercase;
+  text-align: center;
+  text-shadow: 0 0 60px rgba(0, 212, 255, 0.3);
+  margin-bottom: 0.5rem;
+}
+
+.contactme-sub {
+  text-align: center;
+  color: #7a9ab5;
+  font-size: 14px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-bottom: 60px;
+}
+
+/* Contact card */
+.contact-card {
+  max-width: 900px;
+  margin: 0 auto;
+  background: rgba(0, 212, 255, 0.04);
+  border: 1px solid rgba(0, 212, 255, 0.15);
+  border-radius: 4px;
+  padding: 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  transition: border-color 0.3s, background 0.3s;
+}
+
+.contact-card:hover {
+  border-color: rgba(0, 212, 255, 0.4);
+  background: rgba(0, 212, 255, 0.08);
+}
+
+/* Field groups */
+.field-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.field-label {
+  font-size: 11px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: #7a9ab5;
+}
+
+.field-input {
+  background: #0d1b2e;
+  border: 1px solid rgba(0, 212, 255, 0.2);
+  border-radius: 8px;
+  padding: 0.75rem 1rem;
+  color: #e0f7ff;
+  font-size: 14px;
+  font-family: inherit;
+  width: 100%;
+  box-sizing: border-box;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  outline: none;
+}
+
+.field-input::placeholder {
+  color: #3d6b8f;
+}
+
+.field-input:focus {
+  border-color: #00d4ff;
+  box-shadow: 0 0 8px rgba(0, 212, 255, 0.2);
+}
+
+.field-textarea {
+  resize: vertical;
+  min-height: 130px;
+}
+
+/* Send button */
+.send-btn {
+  align-self: flex-start;
+  background: transparent;
+  border: 1px solid #00d4ff;
+  border-radius: 2px;
+  color: #00d4ff;
+  font-size: 11px;
+  font-family: inherit;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  padding: 12px 28px;
+  cursor: pointer;
+  transition: background 0.25s, color 0.25s;
+}
+
+.send-btn:hover {
+  background: #00d4ff;
+  color: #020c1a;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .contactme-content {
+    padding: 100px 24px 60px;
+  }
+
+  .contactme-title {
+    font-size: 44px;
+    letter-spacing: 4px;
+  }
+
+  .contact-card {
+    padding: 28px 20px;
+  }
+
+  .send-btn {
+    align-self: stretch;
+    text-align: center;
+  }
+}

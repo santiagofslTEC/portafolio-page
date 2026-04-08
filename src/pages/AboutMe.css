@@ -1,0 +1,144 @@
+.aboutme-container {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  background: radial-gradient(
+    ellipse at center,
+    #0a3d6b 0%,
+    #041e33 40%,
+    #020c1a 100%
+  );
+  overflow: hidden;
+}
+
+.aboutme-canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.aboutme-content {
+  position: relative;
+  z-index: 1;
+  padding: 120px 80px 80px;
+  opacity: 0;
+}
+
+.depth-label {
+  font-size: 11px;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: #00d4ff;
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.aboutme-title {
+  font-size: 72px;
+  font-weight: 700;
+  color: #e0f7ff;
+  letter-spacing: 6px;
+  text-transform: uppercase;
+  text-align: center;
+  text-shadow: 0 0 60px rgba(0, 212, 255, 0.3);
+  margin-bottom: 0.5rem;
+}
+
+.aboutme-sub {
+  text-align: center;
+  color: #7a9ab5;
+  font-size: 14px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-bottom: 60px;
+}
+
+.aboutme-inner {
+  max-width: 900px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+/* Bio card */
+.bio-card {
+  background: rgba(0, 212, 255, 0.04);
+  border: 1px solid rgba(0, 212, 255, 0.15);
+  border-radius: 4px;
+  padding: 32px;
+  transition: border-color 0.3s, background 0.3s;
+}
+
+.bio-card:hover {
+  border-color: rgba(0, 212, 255, 0.4);
+  background: rgba(0, 212, 255, 0.08);
+}
+
+.bio-text {
+  font-size: 15px;
+  color: #7a9ab5;
+  line-height: 1.8;
+  margin: 0;
+}
+
+/* Section blocks */
+.section-block {
+  background: rgba(0, 212, 255, 0.04);
+  border: 1px solid rgba(0, 212, 255, 0.15);
+  border-radius: 4px;
+  padding: 32px;
+  transition: border-color 0.3s, background 0.3s;
+}
+
+.section-block:hover {
+  border-color: rgba(0, 212, 255, 0.4);
+  background: rgba(0, 212, 255, 0.08);
+}
+
+.section-heading {
+  font-size: 14px;
+  font-weight: 600;
+  color: #e0f7ff;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  margin-bottom: 20px;
+}
+
+.section-marker {
+  color: #00d4ff;
+  margin-right: 8px;
+}
+
+/* Tags */
+.tag-group {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.tag {
+  font-size: 11px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  padding: 4px 12px;
+  border: 1px solid rgba(0, 212, 255, 0.3);
+  color: #00d4ff;
+  border-radius: 2px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .aboutme-content {
+    padding: 100px 24px 60px;
+  }
+
+  .aboutme-title {
+    font-size: 44px;
+    letter-spacing: 4px;
+  }
+}
