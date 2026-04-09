@@ -3,7 +3,7 @@ import * as THREE from "three";
 import { gsap } from "gsap";
 import "./AboutMe.css";
 
-const SKILLS = ["React", "JavaScript", "Python", "CSS", "Git", "Node.js", "SQL"];
+const SKILLS = ["React","React native", "JavaScript", "Python", "CSS", "Git", "Node.js", "three.js", "GSAP",];
 const INTERESTS = ["Surfing", "Tennis", "Software Development", "Open Source"];
 
 const AboutMe = () => {
@@ -141,9 +141,9 @@ const AboutMe = () => {
         <div className="aboutme-inner">
           <div className="bio-card">
             <p className="bio-text">
-              Hey, I'm Santiago — a software engineering student at Tecnológico de Costa Rica
+              Hey, I'm Santiago — a computer science student at Tecnológico de Monterrey
               passionate about building things that live on the internet. When I'm not writing
-              code, you'll find me chasing waves on a surfboard or trading groundstrokes on
+              code, you'll find me chasing waves in the ocean or trading groundstrokes on
               the tennis court. I believe great software, like a perfect wave, is all about
               timing, flow, and knowing when to commit.
             </p>
