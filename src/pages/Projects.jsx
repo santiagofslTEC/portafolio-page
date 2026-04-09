@@ -14,64 +14,121 @@ const Projects = () => {
     renderer.setPixelRatio(window.devicePixelRatio);
 
     const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 100);
-    camera.position.z = 5;
+    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 200);
+    camera.position.z = 8;
 
-    const createStream = (color, count, speedMult, angleOffset) => {
+    const spriteCanvas = document.createElement("canvas");
+    spriteCanvas.width = 64;
+    spriteCanvas.height = 64;
+    const ctx = spriteCanvas.getContext("2d");
+    const grad = ctx.createRadialGradient(32, 32, 0, 32, 32, 32);
+    grad.addColorStop(0,   "rgba(255,255,255,1)");
+    grad.addColorStop(0.4, "rgba(255,255,255,0.6)");
+    grad.addColorStop(1,   "rgba(255,255,255,0)");
+    ctx.fillStyle = grad;
+    ctx.fillRect(0, 0, 64, 64);
+    const sprite = new THREE.CanvasTexture(spriteCanvas);
+
+    const createTube = (color, curvePoints, count, tubeRadius) => {
+      const curve = new THREE.CatmullRomCurve3(curvePoints, true);
+
       const positions = new Float32Array(count * 3);
-      const offsets = new Float32Array(count);
+      const progress = new Float32Array(count);
+      const speeds = new Float32Array(count);
+      const radialOffsets = new Float32Array(count * 2);
+
       for (let i = 0; i < count; i++) {
-        offsets[i] = Math.random() * Math.PI * 2;
-        positions[i * 3]     = (Math.random() - 0.5) * 20;
-        positions[i * 3 + 1] = (Math.random() - 0.5) * 12;
-        positions[i * 3 + 2] = (Math.random() - 0.5) * 6;
+        progress[i] = Math.random();
+        speeds[i] = 0.0008 + Math.random() * 0.0006;
+
+        // random offset within tube radius
+        const angle = Math.random() * Math.PI * 2;
+        const r = Math.random() * tubeRadius;
+        radialOffsets[i * 2]     = Math.cos(angle) * r;
+        radialOffsets[i * 2 + 1] = Math.sin(angle) * r;
+
+        const point = curve.getPoint(progress[i]);
+        positions[i * 3]     = point.x + radialOffsets[i * 2];
+        positions[i * 3 + 1] = point.y + radialOffsets[i * 2 + 1];
+        positions[i * 3 + 2] = point.z;
       }
+
       const geo = new THREE.BufferGeometry();
       geo.setAttribute("position", new THREE.BufferAttribute(positions, 3));
+
       const mat = new THREE.PointsMaterial({
-        color, size: 0.035, transparent: true, opacity: 0.75,
+        color,
+        size: 0.06,
+        transparent: true,
+        opacity: 0.85,
+        sizeAttenuation: true,
+        map: sprite,
+        depthWrite: false,
+        blending: THREE.AdditiveBlending,
       });
+
       const points = new THREE.Points(geo, mat);
       scene.add(points);
-      return { points, offsets, speedMult, angleOffset };
+      return { points, curve, progress, speeds, radialOffsets, tubeRadius };
     };
 
-    const streams = [
-      createStream(0x00d4ff, 400, 1.0,  0),
-      createStream(0x00aaff, 300, 0.7,  Math.PI / 4),
-      createStream(0x40e0ff, 250, 1.3, -Math.PI / 5),
-      createStream(0x7af0ff, 200, 0.5,  Math.PI / 3),
-      createStream(0x0088cc, 150, 0.9, -Math.PI / 6),
+    // ribbon 1 — cyan, sweeps across diagonally
+    const curve1Points = [
+      new THREE.Vector3(-20,  4,   6),
+      new THREE.Vector3(-10, -3,   2),
+      new THREE.Vector3(  0,  5,  -2),
+      new THREE.Vector3( 10, -4,   4),
+      new THREE.Vector3( 20,  3,   6),
+      new THREE.Vector3( 12,  6,  -6),
+      new THREE.Vector3(  0, -5,  -8),
+      new THREE.Vector3(-12,  6,  -6),
+    ];
+    
+    const curve2Points = [
+      new THREE.Vector3( 20, -4,   6),
+      new THREE.Vector3( 10,  3,   2),
+      new THREE.Vector3(  0, -5,  -2),
+      new THREE.Vector3(-10,  4,   4),
+      new THREE.Vector3(-20, -3,   6),
+      new THREE.Vector3(-12, -6,  -6),
+      new THREE.Vector3(  0,  5,  -8),
+      new THREE.Vector3( 12, -6,  -6),
     ];
 
-    let t = 0;
+    const tubes = [
+      createTube(0x00d4ff, curve1Points, 6000, 0.25),
+      createTube(0x00c896, curve2Points, 6000, 0.25),
+    ];
+
     let animating = true;
 
     const animate = () => {
       if (!animating) return;
       requestAnimationFrame(animate);
-      t += 0.008;
-      streams.forEach(({ points, offsets, speedMult, angleOffset }) => {
+
+      tubes.forEach(({ points, curve, progress, speeds, radialOffsets }) => {
         const pos = points.geometry.attributes.position;
+
         for (let i = 0; i < pos.count; i++) {
-          const offset = offsets[i];
-          const newX = pos.getX(i) + Math.cos(angleOffset) * speedMult * 0.012;
-          const newY = pos.getY(i) + Math.sin(t * speedMult + offset) * 0.01
-                         + Math.sin(angleOffset) * speedMult * 0.008;
-          const newZ = pos.getZ(i) + Math.cos(t * 0.3 + offset) * 0.003;
-          pos.setXYZ(i, newX, newY, newZ);
-          if (pos.getX(i) > 12)  pos.setX(i, -12);
-          if (pos.getX(i) < -12) pos.setX(i,  12);
-          if (pos.getY(i) > 7)   pos.setY(i,  -7);
-          if (pos.getY(i) < -7)  pos.setY(i,   7);
+          progress[i] += speeds[i];
+          if (progress[i] > 1) progress[i] -= 1;
+
+          const point = curve.getPoint(progress[i]);
+          pos.setXYZ(
+            i,
+            point.x + radialOffsets[i * 2],
+            point.y + radialOffsets[i * 2 + 1],
+            point.z
+          );
         }
+
         pos.needsUpdate = true;
       });
+
       renderer.render(scene, camera);
     };
     animate();
 
-    // fade in content on mount
     gsap.fromTo(contentRef.current,
       { opacity: 0, y: 40 },
       { opacity: 1, y: 0, duration: 1.2, ease: "power3.out", delay: 0.2 }
@@ -88,6 +145,7 @@ const Projects = () => {
       animating = false;
       window.removeEventListener("resize", handleResize);
       renderer.dispose();
+      sprite.dispose();
     };
   }, []);
 
