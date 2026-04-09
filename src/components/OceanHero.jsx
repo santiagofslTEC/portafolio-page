@@ -87,7 +87,7 @@ const OceanHero = ({ onDive, projectsRef }) => {
       <video
         ref={videoRef}
         className="ocean-video"
-        src="/ocean1.mp4"
+        src="/Ocean1.mp4"
         autoPlay
         muted
         loop
