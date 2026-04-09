@@ -25,3 +25,6 @@ dist-ssr
 public/ocean1.mp4
 public/ocean2.mp4
 .claude/ 
+.env
+.env.local
+.env.production
