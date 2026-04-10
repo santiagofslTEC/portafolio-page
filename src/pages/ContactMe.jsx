@@ -9,6 +9,7 @@ const ContactMe = () => {
   const overlayRef = useRef(null);
 
   const [form, setForm] = useState({ name: "", email: "", message: "" });
+  const [status, setStatus] = useState("idle");
 
   const handleOnchange = (event) => {
     const { name, value } = event.target;
@@ -17,17 +18,29 @@ const ContactMe = () => {
 
   const handleSendEmail = async (e) => {
     e.preventDefault();
-    const data = await fetch("/api/server", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        name: form.name,
-        email: form.email,
-        message: form.message,
-      }),
-    });
-    const res = await data.json();
-    console.log(res);
+    setStatus("sending");
+  
+    try {
+      const data = await fetch("/api/server", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: form.name,
+          email: form.email,
+          message: form.message,
+        }),
+      });
+      const res = await data.json();
+  
+      if (data.ok) {
+        setStatus("success");
+        setForm({ name: "", email: "", message: "" });
+      } else {
+        setStatus("error");
+      }
+    } catch (error) {
+      setStatus("error");
+    }
   };
 
   useEffect(() => {
@@ -197,9 +210,24 @@ const ContactMe = () => {
             />
           </div>
 
-          <button className="send-btn" onClick={handleSendEmail}>
-            Send Message
+          <button
+            className="send-btn"
+            onClick={handleSendEmail}
+            disabled={status === "sending"}
+          >
+            {status === "sending" ? "Sending..." : "Send Message"}
           </button>
+
+          {status === "success" && (
+            <p style={{ color: "#00d4ff", fontSize: "13px", letterSpacing: "2px", textTransform: "uppercase", marginTop: "8px" }}>
+              Message sent — I'll be in touch.
+            </p>
+          )}
+          {status === "error" && (
+            <p style={{ color: "#ff6b6b", fontSize: "13px", letterSpacing: "2px", textTransform: "uppercase", marginTop: "8px" }}>
+              Something went wrong. Try again.
+            </p>
+          )}
         </div>
       </div>
     </div>
