@@ -30,75 +30,101 @@ const Projects = () => {
     const sprite = new THREE.CanvasTexture(spriteCanvas);
 
     const createTube = (color, curvePoints, count, tubeRadius) => {
-      const curve = new THREE.CatmullRomCurve3(curvePoints, true);
+      const curve = new THREE.CatmullRomCurve3(curvePoints, false);
 
       const positions = new Float32Array(count * 3);
       const progress = new Float32Array(count);
       const speeds = new Float32Array(count);
       const radialOffsets = new Float32Array(count * 2);
+      const colors = new Float32Array(count * 3);
+      const drifts = new Float32Array(count * 3);
+      const baseColor = new THREE.Color(color);
 
       for (let i = 0; i < count; i++) {
         progress[i] = Math.random();
-        speeds[i] = 0.0008 + Math.random() * 0.0006;
+        speeds[i] = 0.0001 + Math.random() * 0.0003;
 
-        // random offset within tube radius
         const angle = Math.random() * Math.PI * 2;
         const r = Math.random() * tubeRadius;
         radialOffsets[i * 2]     = Math.cos(angle) * r;
         radialOffsets[i * 2 + 1] = Math.sin(angle) * r;
 
+        drifts[i * 3]     = (Math.random() - 0.5) * 0.001;
+        drifts[i * 3 + 1] = (Math.random() - 0.5) * 0.001;
+        drifts[i * 3 + 2] = (Math.random() - 0.5) * 0.0005;
+
         const point = curve.getPoint(progress[i]);
         positions[i * 3]     = point.x + radialOffsets[i * 2];
         positions[i * 3 + 1] = point.y + radialOffsets[i * 2 + 1];
         positions[i * 3 + 2] = point.z;
+
+        colors[i * 3]     = baseColor.r;
+        colors[i * 3 + 1] = baseColor.g;
+        colors[i * 3 + 2] = baseColor.b;
       }
 
       const geo = new THREE.BufferGeometry();
       geo.setAttribute("position", new THREE.BufferAttribute(positions, 3));
+      geo.setAttribute("color",    new THREE.BufferAttribute(colors, 3));
 
       const mat = new THREE.PointsMaterial({
-        color,
         size: 0.06,
         transparent: true,
-        opacity: 0.85,
+        opacity: 1,
         sizeAttenuation: true,
         map: sprite,
         depthWrite: false,
         blending: THREE.AdditiveBlending,
+        vertexColors: true,
       });
 
       const points = new THREE.Points(geo, mat);
       scene.add(points);
-      return { points, curve, progress, speeds, radialOffsets, tubeRadius };
+      return { points, curve, progress, speeds, radialOffsets, baseColor, drifts };
     };
 
-    // ribbon 1 — cyan, sweeps across diagonally
     const curve1Points = [
       new THREE.Vector3(-20,  4,   6),
       new THREE.Vector3(-10, -3,   2),
-      new THREE.Vector3(  0,  5,  -2),
+      new THREE.Vector3( -13,  6,  -2),
       new THREE.Vector3( 10, -4,   4),
       new THREE.Vector3( 20,  3,   6),
       new THREE.Vector3( 12,  6,  -6),
       new THREE.Vector3(  0, -5,  -8),
       new THREE.Vector3(-12,  6,  -6),
     ];
-    
+
     const curve2Points = [
-      new THREE.Vector3( 20, -4,   6),
-      new THREE.Vector3( 10,  3,   2),
-      new THREE.Vector3(  0, -5,  -2),
-      new THREE.Vector3(-10,  4,   4),
-      new THREE.Vector3(-20, -3,   6),
-      new THREE.Vector3(-12, -6,  -6),
-      new THREE.Vector3(  0,  5,  -8),
-      new THREE.Vector3( 12, -6,  -6),
+      new THREE.Vector3(-15, -6,   5),
+      new THREE.Vector3(  5,  2,   1),
+      new THREE.Vector3( 18,  6,  -1),
+      new THREE.Vector3(  8, -2,  -4),
+      new THREE.Vector3( -8,  4,  -7),
+      new THREE.Vector3(-18, -1,  -3),
+      new THREE.Vector3( -5, -5,   3),
+      new THREE.Vector3( 15,  1,  -6),
+    ];
+
+    const curve3Points = [
+      new THREE.Vector3(  8,  8,  -7),
+      new THREE.Vector3(  2,  3,   0),
+      new THREE.Vector3( -5,  6,   3),
+      new THREE.Vector3(-14,  1,   5),
+      new THREE.Vector3(-10, -4,   2),
+      new THREE.Vector3(  0, -6,  -3),
+      new THREE.Vector3( 10, -3,  -6),
     ];
 
     const tubes = [
-      createTube(0x00d4ff, curve1Points, 6000, 0.25),
-      createTube(0x00c896, curve2Points, 6000, 0.25),
+      createTube(0x00d4ff, curve1Points, 12000, 0.85),
+      createTube(0x00c896, curve2Points, 10000, 0.95),
+      createTube(0x00aaff, curve3Points,  8000, 0.70),
+
     ];
+
+    const zFar   = -8;
+    const zClose =  6;
+    const zRange = zClose - zFar;
 
     let animating = true;
 
@@ -106,23 +132,61 @@ const Projects = () => {
       if (!animating) return;
       requestAnimationFrame(animate);
 
-      tubes.forEach(({ points, curve, progress, speeds, radialOffsets }) => {
+      tubes.forEach(({ points, curve, progress, speeds, radialOffsets, baseColor, drifts }) => {
         const pos = points.geometry.attributes.position;
+        const col = points.geometry.attributes.color;
 
         for (let i = 0; i < pos.count; i++) {
           progress[i] += speeds[i];
-          if (progress[i] > 1) progress[i] -= 1;
+
+          if (progress[i] > 1) {
+            progress[i] = 0;
+            const angle = Math.random() * Math.PI * 2;
+            const r = Math.random() * 0.85;
+            radialOffsets[i * 2]     = Math.cos(angle) * r;
+            radialOffsets[i * 2 + 1] = Math.sin(angle) * r;
+            const startPoint = curve.getPoint(0);
+            pos.setXYZ(
+              i,
+              startPoint.x + radialOffsets[i * 2],
+              startPoint.y + radialOffsets[i * 2 + 1],
+              startPoint.z
+            );
+            continue;
+          }
 
           const point = curve.getPoint(progress[i]);
+          const px = point.x + radialOffsets[i * 2];
+          const py = point.y + radialOffsets[i * 2 + 1];
+          const pz = point.z;
+
+          const currentX = pos.getX(i);
+          const currentY = pos.getY(i);
+          const currentZ = pos.getZ(i);
+
           pos.setXYZ(
             i,
-            point.x + radialOffsets[i * 2],
-            point.y + radialOffsets[i * 2 + 1],
-            point.z
+            currentX + drifts[i * 3]     + (px - currentX) * 0.08,
+            currentY + drifts[i * 3 + 1] + (py - currentY) * 0.08,
+            currentZ + drifts[i * 3 + 2] + (pz - currentZ) * 0.08,
+          );
+
+          const t = Math.max(0, Math.min(1, (pz - zFar) / zRange));
+          const depthFade = 0.35 + t * t * 0.65;
+          const edgeFade = Math.sin(progress[i] * Math.PI);
+          const smoothEdge = 0.4 + edgeFade * 0.6;
+          const fade = depthFade * smoothEdge;
+
+          col.setXYZ(
+            i,
+            baseColor.r * fade,
+            baseColor.g * fade,
+            baseColor.b * fade
           );
         }
 
         pos.needsUpdate = true;
+        col.needsUpdate = true;
       });
 
       renderer.render(scene, camera);
