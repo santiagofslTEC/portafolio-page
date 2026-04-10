@@ -359,13 +359,24 @@ const Projects = () => {
                   alt="Calculator preview"
                   className="card-preview-img"
                 />
-                  <a href="https://github.com/santiagofslTEC/CalculadoraHTML"
-                  target="_blank"
-                  rel="noreferrer"
-                  className="card-github-link"
-                >
-                  View on GitHub
-                </a>
+                <div style={{ display: "flex", gap: "12px" }}>
+                  <a
+                    href="https://santiagofsltec.github.io/CalculadoraHTML/"
+                    target="_blank"
+                    rel="noreferrer"
+                    className="card-github-link"
+                  >
+                    Live Demo
+                  </a>
+                  <a
+                    href="https://github.com/santiagofslTEC/CalculadoraHTML"
+                    target="_blank"
+                    rel="noreferrer"
+                    className="card-github-link"
+                  >
+                    GitHub
+                  </a>
+                </div>
               </div>
             </div>
           </div>
