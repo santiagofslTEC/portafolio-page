@@ -335,22 +335,81 @@ const Projects = () => {
         <h2 className="projects-title">Projects</h2>
         <p className="projects-sub">These are things I've built</p>
         <div className="projects-grid">
-          {[1, 2, 3].map((i) => (
-            <div key={i} className="project-card">
-              <div className="project-card-top">
-                <span className="project-number">0{i}</span>
+  
+          <div className="project-card">
+            <div className="card-inner">
+              <div className="card-front">
+                <div className="project-card-top">
+                  <span className="project-number">01</span>
+                </div>
+                <h3 className="project-name">HTML Calculator</h3>
+                <p className="project-desc">
+                  A functional calculator built from scratch with vanilla JavaScript, HTML, and CSS. Features regex input validation, operation history, and a clean two-panel UI.
+                </p>
+                <div className="project-tags">
+                  <span className="tag">HTML</span>
+                  <span className="tag">CSS</span>
+                  <span className="tag">JavaScript</span>
+                  <span className="tag">Regex</span>
+                </div>
               </div>
-              <h3 className="project-name">Project Name</h3>
-              <p className="project-desc">
-                A short description of what this project does and the tech stack used.
-              </p>
-              <div className="project-tags">
-                <span className="tag">React</span>
-                <span className="tag">Node.js</span>
-                <span className="tag">Three.js</span>
+              <div className="card-back">
+                <img
+                  src="/calculator.png"
+                  alt="Calculator preview"
+                  className="card-preview-img"
+                />
+                  <a href="https://github.com/santiagofslTEC/CalculadoraHTML"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="card-github-link"
+                >
+                  View on GitHub
+                </a>
               </div>
             </div>
-          ))}
+          </div>
+  
+          <div className="project-card">
+            <div className="card-inner">
+              <div className="card-front">
+                <div className="project-card-top">
+                  <span className="project-number">02</span>
+                </div>
+                <h3 className="project-name">Coming Soon</h3>
+                <p className="project-desc">More projects in the works.</p>
+                <div className="project-tags">
+                  <span className="tag">—</span>
+                </div>
+              </div>
+              <div className="card-back">
+                <p style={{ color: "#7a9ab5", fontSize: "13px", letterSpacing: "2px", textTransform: "uppercase" }}>
+                  Stay tuned
+                </p>
+              </div>
+            </div>
+          </div>
+  
+          <div className="project-card">
+            <div className="card-inner">
+              <div className="card-front">
+                <div className="project-card-top">
+                  <span className="project-number">03</span>
+                </div>
+                <h3 className="project-name">Coming Soon</h3>
+                <p className="project-desc">More projects in the works.</p>
+                <div className="project-tags">
+                  <span className="tag">—</span>
+                </div>
+              </div>
+              <div className="card-back">
+                <p style={{ color: "#7a9ab5", fontSize: "13px", letterSpacing: "2px", textTransform: "uppercase" }}>
+                  Stay tuned
+                </p>
+              </div>
+            </div>
+          </div>
+  
         </div>
       </div>
     </div>
