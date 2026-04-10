@@ -30,7 +30,7 @@ const ContactMe = () => {
           message: form.message,
         }),
       });
-      const res = await data.json();
+
   
       if (data.ok) {
         setStatus("success");
@@ -38,7 +38,7 @@ const ContactMe = () => {
       } else {
         setStatus("error");
       }
-    } catch (error) {
+    } catch  {
       setStatus("error");
     }
   };
