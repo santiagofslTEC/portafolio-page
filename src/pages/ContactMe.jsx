@@ -247,6 +247,32 @@ const ContactMe = () => {
               Message sent — I'll be in touch.
             </p>
           )}
+          {status === "empty" && (
+            <p
+              style={{
+                color: "#ff6b6b",
+                fontSize: "13px",
+                letterSpacing: "2px",
+                textTransform: "uppercase",
+                marginTop: "8px",
+              }}
+            >
+              Please fill in all fields.
+            </p>
+          )}
+          {status === "invalid" && (
+            <p
+              style={{
+                color: "#ff6b6b",
+                fontSize: "13px",
+                letterSpacing: "2px",
+                textTransform: "uppercase",
+                marginTop: "8px",
+              }}
+            >
+              Invalid email address.
+            </p>
+          )}
           {status === "error" && (
             <p
               style={{
