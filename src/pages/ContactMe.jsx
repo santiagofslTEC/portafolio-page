@@ -18,8 +18,19 @@ const ContactMe = () => {
 
   const handleSendEmail = async (e) => {
     e.preventDefault();
+
+    if (!form.name || !form.email || !form.message) {
+      setStatus("empty-fields");
+      return;
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; // regular expression that cheks for mail to be in the corrert format aka "something@something.something"
+    if (!emailRegex.test(form.email)) {
+      setStatus("invalid-email");
+      return;
+    }
     setStatus("sending");
-  
+
     try {
       const data = await fetch("/api/server", {
         method: "POST",
@@ -31,14 +42,13 @@ const ContactMe = () => {
         }),
       });
 
-  
       if (data.ok) {
         setStatus("success");
         setForm({ name: "", email: "", message: "" });
       } else {
         setStatus("error");
       }
-    } catch  {
+    } catch {
       setStatus("error");
     }
   };
@@ -64,7 +74,7 @@ const ContactMe = () => {
 
       for (let i = 0; i < count; i++) {
         offsets[i] = Math.random() * Math.PI * 2;
-        positions[i * 3]     = (Math.random() - 0.5) * 20;
+        positions[i * 3] = (Math.random() - 0.5) * 20;
         positions[i * 3 + 1] = (Math.random() - 0.5) * 12;
         positions[i * 3 + 2] = (Math.random() - 0.5) * 6;
       }
@@ -83,10 +93,10 @@ const ContactMe = () => {
     };
 
     const streams = [
-      createStream(0x00d4ff, 300, 0.7,  0),
-      createStream(0x00aaff, 200, 0.5,  Math.PI / 4),
+      createStream(0x00d4ff, 300, 0.7, 0),
+      createStream(0x00aaff, 200, 0.5, Math.PI / 4),
       createStream(0x40e0ff, 180, 1.0, -Math.PI / 5),
-      createStream(0x7af0ff, 130, 0.4,  Math.PI / 3),
+      createStream(0x7af0ff, 130, 0.4, Math.PI / 3),
       createStream(0x0088cc, 100, 0.8, -Math.PI / 6),
     ];
 
@@ -113,10 +123,10 @@ const ContactMe = () => {
 
           pos.setXYZ(i, newX, newY, newZ);
 
-          if (pos.getX(i) > 12)  pos.setX(i, -12);
-          if (pos.getX(i) < -12) pos.setX(i,  12);
-          if (pos.getY(i) > 7)   pos.setY(i,  -7);
-          if (pos.getY(i) < -7)  pos.setY(i,   7);
+          if (pos.getX(i) > 12) pos.setX(i, -12);
+          if (pos.getX(i) < -12) pos.setX(i, 12);
+          if (pos.getY(i) > 7) pos.setY(i, -7);
+          if (pos.getY(i) < -7) pos.setY(i, 7);
         }
         pos.needsUpdate = true;
       });
@@ -172,7 +182,9 @@ const ContactMe = () => {
 
         <div className="contact-card">
           <div className="field-group">
-            <label className="field-label" htmlFor="name">Name</label>
+            <label className="field-label" htmlFor="name">
+              Name
+            </label>
             <input
               id="name"
               className="field-input"
@@ -185,7 +197,9 @@ const ContactMe = () => {
           </div>
 
           <div className="field-group">
-            <label className="field-label" htmlFor="email">Email</label>
+            <label className="field-label" htmlFor="email">
+              Email
+            </label>
             <input
               id="email"
               className="field-input"
@@ -198,7 +212,9 @@ const ContactMe = () => {
           </div>
 
           <div className="field-group">
-            <label className="field-label" htmlFor="message">Message</label>
+            <label className="field-label" htmlFor="message">
+              Message
+            </label>
             <textarea
               id="message"
               className="field-input field-textarea"
@@ -219,12 +235,28 @@ const ContactMe = () => {
           </button>
 
           {status === "success" && (
-            <p style={{ color: "#00d4ff", fontSize: "13px", letterSpacing: "2px", textTransform: "uppercase", marginTop: "8px" }}>
+            <p
+              style={{
+                color: "#00d4ff",
+                fontSize: "13px",
+                letterSpacing: "2px",
+                textTransform: "uppercase",
+                marginTop: "8px",
+              }}
+            >
               Message sent — I'll be in touch.
             </p>
           )}
           {status === "error" && (
-            <p style={{ color: "#ff6b6b", fontSize: "13px", letterSpacing: "2px", textTransform: "uppercase", marginTop: "8px" }}>
+            <p
+              style={{
+                color: "#ff6b6b",
+                fontSize: "13px",
+                letterSpacing: "2px",
+                textTransform: "uppercase",
+                marginTop: "8px",
+              }}
+            >
               Something went wrong. Try again.
             </p>
           )}
