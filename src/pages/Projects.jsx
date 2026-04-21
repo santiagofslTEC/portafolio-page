@@ -139,25 +139,25 @@ const Projects = () => {
       const drifts = new Float32Array(count * 3);
       const baseColor = new THREE.Color(color);
 
-      for (let i = 0; i < count; i++) {
-        progress[i] = Math.random();
-        speeds[i] = 0.0001 + Math.random() * 0.0003;
+      for (let i = 0; i < count; i++) {  
+        progress[i] = Math.random();  // makes particle start at random point along the curve 
+        speeds[i] = 0.0001 + Math.random() * 0.0003;  // gives each particle a slightly different speed to make it feel organic like current 
 
-        const angle = Math.random() * Math.PI * 2;
+        const angle = Math.random() * Math.PI * 2;  // creates cylinder shape by assigning random angle + radius to each particle, so they spawn in a circle around the curve instead of directly on it
         const r = Math.random() * tubeRadius;
         radialOffsets[i * 2]     = Math.cos(angle) * r;
-        radialOffsets[i * 2 + 1] = Math.sin(angle) * r;
+        radialOffsets[i * 2 + 1] = Math.sin(angle) * r; // its a polar to cartesian conversion basically 
 
         drifts[i * 3]     = (Math.random() - 0.5) * 0.001;
-        drifts[i * 3 + 1] = (Math.random() - 0.5) * 0.001;
+        drifts[i * 3 + 1] = (Math.random() - 0.5) * 0.001; // adds like a nudge to particles every frame to make them either go faster or slower this makes the effect feel more dinamic 
         drifts[i * 3 + 2] = (Math.random() - 0.5) * 0.0005;
 
-        const point = curve.getPoint(progress[i]);
-        positions[i * 3]     = point.x + radialOffsets[i * 2];
-        positions[i * 3 + 1] = point.y + radialOffsets[i * 2 + 1];
+        const point = curve.getPoint(progress[i]);  
+        positions[i * 3]     = point.x + radialOffsets[i * 2];  // makes the particles start at a random spot around the curve with an offset to make it look thick and full 
+        positions[i * 3 + 1] = point.y + radialOffsets[i * 2 + 1];   
         positions[i * 3 + 2] = point.z;
 
-        colors[i * 3]     = baseColor.r;
+        colors[i * 3]     = baseColor.r; // it gives teh particles an initial color then gradually fades them as they move farther away 
         colors[i * 3 + 1] = baseColor.g;
         colors[i * 3 + 2] = baseColor.b;
       }
@@ -349,8 +349,7 @@ const Projects = () => {
                 <div className="project-tags">
                   <span className="tag">HTML</span>
                   <span className="tag">CSS</span>
-                  <span className="tag">JavaScript</span>
-                  <span className="tag">Regex</span>
+                  <span className="tag">Stitch Ai</span>
                 </div>
               </div>
               <div className="card-back">
