@@ -450,8 +450,8 @@ const Projects = () => {
                 <div className="project-card-top">
                   <span className="project-number">03</span>
                 </div>
-                <h3 className="project-name">Coming Soon</h3>
-                <p className="project-desc">More projects in the works.</p>
+                <h3 className="project-name">Chatify Coming Soon</h3>
+                <p className="project-desc">chatify a better way to intereact online with others!</p>
                 <div className="project-tags">
                   <span className="tag">—</span>
                 </div>
